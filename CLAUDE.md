@@ -207,6 +207,14 @@ code de ce dépôt. Compléter ce fichier quand un nouveau piège est découvert
 - `Intl.NumberFormat('fr-FR')` sépare les milliers par une espace fine insécable (U+202F) :
   en tenir compte dans les assertions.
 
+**CI**
+
+- Le job « Docker build » échoue en `429 Too Many Requests` en tirant `node:24-alpine` sur Docker
+  Hub (limite des pulls anonymes, IP partagées des runners GitHub) : ce n'est pas le code. Le
+  `Dockerfile` tire donc la même image officielle depuis le miroir ECR Public
+  (`public.ecr.aws/docker/library/node:24-alpine`, même empreinte). Un 429 dans un run passé ne
+  se « corrige » pas autrement : le push suivant relance la CI.
+
 ## Store
 
 - Validateur officiel, depuis la racine : `npx -y github:GladysAssistant/integration-store .`
