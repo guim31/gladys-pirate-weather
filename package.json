@@ -1,8 +1,8 @@
 {
-  "name": "gladys-integration-template-js",
+  "name": "gladys-pirate-weather",
   "version": "1.0.0",
   "private": true,
-  "description": "Official starter template to build an external integration for Gladys Assistant with the JavaScript SDK.",
+  "description": "Pirate Weather provider for Gladys Assistant: forecasts, minute-by-minute precipitation and official weather alerts.",
   "type": "module",
   "main": "index.js",
   "scripts": {

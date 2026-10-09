@@ -1,59 +1,199 @@
-# Demo Devices Template
+# Pirate Weather
 
-This is the user documentation of the integration. Gladys re-hosts this file
-and shows a permanent **Documentation** link to it in the Configuration screen
-(in the user's language, with English as the fallback) — it is when
-configuring that the user needs it most. Keep the short onboarding hints in
-the `section` blocks of the manifest `config_schema`; put the long
-step-by-step (screenshots, troubleshooting…) here.
+Weather for Gladys from [Pirate Weather](https://pirateweather.net/), the open
+successor of the Dark Sky API: current conditions, 24-hour and 8-day forecasts,
+the next 60 minutes of rain and snow minute by minute, and official weather
+alerts — tornado, severe thunderstorm, flash flood, hurricane, heat, winter
+storm warnings from the National Weather Service in the United States, and the
+alerts of Environment Canada and of the European weather services.
+
+It works anywhere in the world with a **free API key**.
+
+**Powered by Pirate Weather.** This integration is a community project, not
+affiliated with Pirate Weather.
 
 ## What you get
 
-Six demo devices show up after installation: a weather station (real data
-from Open-Meteo), a switch, a dimmable light, a smart plug with power
-metering, a motion sensor and a camera.
+- **The Gladys weather widget and the chat assistant** use Pirate Weather:
+  current conditions, the next 24 hours, the next 8 days, sunrise and sunset,
+  UV index, and the active alerts with their full text. Everything is shown in
+  **°F and mph** or **°C and m/s**, following the unit system of each Gladys
+  user.
+- **Weather alert scenes**: the built-in Gladys trigger "Weather alert" works
+  with the Pirate Weather alerts — for example "when a tornado warning is
+  issued for my house, turn every light on and send me a message". The
+  integration tells Gladys as soon as an alert appears or changes, so the
+  scene starts within a minute of the refresh that saw it.
+- **Scene trigger "Rain or snow expected within the hour"**: fires when the
+  minute-by-minute forecast starts showing precipitation within the hour.
+- **Scene action "Get the precipitation of the next hour"**: tells a scene
+  whether rain or snow is coming, when, and how strong — to close the awning
+  or skip the sprinklers.
+- **Dashboard widget "Precipitation, next hour"**: the minute-by-minute chart
+  of the next 60 minutes.
+
+## Before you start: get your free API key
+
+1. Go to [pirateweather.net](https://pirateweather.net/) and click **Sign up**.
+2. Once signed in, **subscribe to the forecast API** with the free plan
+   (10,000 calls a month). Without this step the key is refused.
+3. Copy your **API key**.
+
+A new key can take **up to 20 minutes** before it works: if the test below
+fails right after signing up, wait a little and try again.
+
+## Installation
+
+1. In Gladys, check that your house has a location: **Settings → Houses**,
+   then set the address or the position on the map. The integration refreshes
+   the weather of every house that has one.
+2. Install **Pirate Weather** from the integration catalog. Gladys asks you to
+   allow access to the location of your houses: it is needed to fetch their
+   weather.
+3. Open the **Configuration** tab, paste your API key, and save.
+4. Click **Test the API key**. The answer shows the current temperature at
+   your house and the calls left this month.
+
+That's it: the weather widget of your dashboard now shows Pirate Weather. If
+another weather integration is installed, you can choose the provider in the
+settings of the weather widget.
 
 ## Configuration
 
-1. Open the **Configuration** tab of the integration.
-2. Set the **latitude** and **longitude** the demo weather station should
-   observe (they default to Paris), and pick your temperature unit.
-3. Save: the devices appear in the **Discovery** tab, ready to be added.
+- **Pirate Weather API key** — your key. It is only ever sent to Pirate
+  Weather, and never written in the logs.
+- **Refresh interval** — leave **Automatic** unless you have a reason (see
+  below). The manual choices go from every 15 minutes to every 2 hours.
+- **Language of the scene texts** — the language of the sentences the
+  integration writes in scene variables ("Heavy rain expected in 12 minutes
+  (90% chance)."). **Automatic** follows the language of your Gladys.
 
-The **Prefer the local connection** toggle drives the demo plug: it reports
-the channel it actually uses as a badge (local or cloud), with an orange dot
-when it runs degraded (local refused, cloud fallback).
+## How often the weather is refreshed, and your quota
 
-## Actions
+Every refresh costs **one call per house**, and that single call feeds
+everything: the dashboard, the chat, the alerts, the scenes and the widget.
+Opening the dashboard costs nothing: Gladys is served from the forecast in
+memory.
 
-- **Test the weather provider** — performs a live request to Open-Meteo and
-  shows the current temperature and humidity under the button.
-- **Identify a device** — pick one of your devices in the list and it will
-  signal itself (the demo light "blinks" in the logs).
+In **Automatic** mode, the integration keeps its refreshes under **half of your
+monthly quota**, and never refreshes more often than every 15 minutes (the
+interval Pirate Weather recommends):
+
+| Houses with a location | Free plan (10,000 calls) | $2/month plan (20,000 calls) |
+| ---------------------- | ------------------------ | ---------------------------- |
+| 1                      | every 15 min — 2,976/mo  | every 15 min — 2,976/mo      |
+| 2                      | every 20 min — 4,464/mo  | every 15 min — 5,952/mo      |
+| 3                      | every 30 min — 4,464/mo  | every 15 min — 8,928/mo      |
+| 4                      | every 45 min — 3,968/mo  | every 20 min — 8,928/mo      |
+
+The other half is a safety margin: restarts, a house added during the month,
+the test button, and any other use of the same key.
+
+Every answer of Pirate Weather tells how many calls are left until the monthly
+reset, and the integration watches it: if the calls left cannot carry the
+current pace until the reset (because the key is shared with another
+application, for instance), the interval is stretched to fit. A manual
+interval obeys the same rule. When only a handful of calls remain, the
+refreshes pause until the reset: Gladys keeps showing the last forecast for up
+to 3 hours, then falls back to its other weather provider if it has one.
+
+You can check your usage at any time on the
+[Pirate Weather usage page](https://docs.pirateweather.net/en/latest/CheckUsage/).
 
 ## Scenes
 
-The integration adds its own cards to the scene editor (Gladys 5.1 or
-later), under the **Integrations** category:
+### Weather alerts (built into Gladys)
 
-- **Motion detected** (trigger) — starts the scene when a demo motion sensor
-  sees something move. Optionally pick the sensor and what moved (person,
-  animal); left empty, any detection matches. The following actions can
-  read what moved with `{{triggerEvent.data.target}}`.
-- **Identify a device** (action) — makes the chosen device signal itself.
-  It returns whether the device could signal itself, so the following
-  actions can depend on it.
+In a scene, pick the trigger **Weather alert**, choose the house, a phenomenon
+(any, wind, thunderstorm, flood, heat, cold, snow...) and a minimum severity.
+Pirate Weather alerts are classified for it:
+
+- **Severity**: the official one — _Extreme_ for a tornado warning, _Severe_
+  for most warnings, _Moderate_ for watches and many advisories, _Minor_ for
+  statements.
+- **Phenomenon**: read from the alert title. Tornado and severe thunderstorm
+  alerts are _thunderstorm_; hurricane and tropical storm alerts are _wind_;
+  storm surge, high surf and rip current alerts are _coastal_; winter storm,
+  blizzard, ice storm and freezing rain alerts are _snow_; wind chill, freeze
+  and frost alerts are _cold_. Alerts with no matching phenomenon (red flag
+  warning, air quality alert, special weather statement) still reach the "any
+  phenomenon" scenes.
+
+Example: _Weather alert, house Home, phenomenon thunderstorm, severity extreme_
+→ turn on all the lights and send a message to the family.
+
+### Rain or snow expected within the hour
+
+Fires once when the minute-by-minute forecast shows precipitation within the
+hour where the previous refresh showed none. Filters: the house (its name,
+exactly as in Gladys; empty for any house), the kind of precipitation (rain,
+snow, sleet, freezing rain) and the strongest intensity expected (light,
+moderate, heavy).
+
+Variables for the following actions: the house, the precipitation, the
+intensity, the minutes until it starts, the probability, and a ready-made
+sentence — for example "Heavy rain expected in 18 minutes (90% chance)."
+
+A minute counts as wet from 0.1 mm/h (0.004 in/h) with a probability of at
+least 40%. Light is under 0.1 in/h (2.5 mm/h), heavy above 0.3 in/h
+(7.6 mm/h). The trigger does not fire twice for the same house within 45
+minutes, and never on the first refresh after a restart.
+
+### Get the precipitation of the next hour
+
+A scene action that reads the minute-by-minute forecast of a house (empty: your
+first house) and returns whether precipitation is expected, in how many
+minutes, its kind, intensity and probability, and a sentence. Use a condition
+on _Precipitation expected_ to decide what comes next. It costs no call.
 
 ## Dashboard
 
-Add the **Demo status** widget to a dashboard: it shows the live
-temperature of the weather station and the power of the office plug, the
-connection the plug currently uses (orange when degraded) and the observed
-location. Its **Identify the light** button makes the demo light signal
-itself.
+- The **Weather** widget of Gladys shows Pirate Weather as soon as the
+  integration is configured.
+- The **Precipitation, next hour** widget, added to a dashboard like any
+  widget, draws the next 60 minutes in in/h or mm/h. Leave the "House"
+  setting empty for your first house, or type the name of another one.
+
+## Limits
+
+- **Minute-by-minute is model data, not radar.** Over the United States it
+  comes from the HRRR sub-hourly model; elsewhere from coarser global models.
+  It is refreshed at the pace of your quota, every 15 minutes at best: a
+  shower that pops up between two refreshes is announced by the next one.
+- **Alerts depend on the region.** The United States (National Weather
+  Service), Canada and Europe are well covered; elsewhere it depends on what
+  the national service publishes to the WMO. Outside the United States, alert
+  titles are in the language of the national service (French in Québec, German
+  in Germany).
+- **No minute-by-minute forecast** for a location: the trigger stays silent,
+  the action and the widget say so.
+- **Houses are matched by name** in the scene and widget fields: type the name
+  exactly as shown in Gladys.
+- The integration needs Gladys 5.1 or later.
 
 ## Troubleshooting
 
-The integration logs everything it does: check the integration logs from the
-Gladys UI (or `docker logs` on the host) with `LOG_LEVEL=debug` for the full
-detail.
+- **"Pirate Weather refused the API key"** — check the key, and that you
+  subscribed to the forecast API in your Pirate Weather account. A new key can
+  take 20 minutes to work. Then click **Test the API key**: if it works, the
+  refreshes start again on their own.
+- **"Monthly Pirate Weather quota spent"** — the refreshes resume after the
+  monthly reset (the date is shown). Reduce the number of houses or set a
+  longer interval, or support Pirate Weather to double your quota.
+- **"No house of Gladys has a location"** — set the location of your house in
+  **Settings → Houses**.
+- **The dashboard still shows another provider** — open the settings of the
+  weather widget and choose Pirate Weather.
+- **Logs**: the **Logs** tab of the integration shows each refresh and the
+  interval chosen ("next refresh in 15 min (auto)").
+
+## Privacy
+
+The coordinates of your houses and your API key are sent to Pirate Weather to
+get the forecast, and nowhere else. Nothing is stored on disk.
+
+## Credits
+
+Weather data: [Pirate Weather](https://pirateweather.net/), created by
+[@alexander0042](https://github.com/alexander0042) — powered by Pirate Weather. Thank you to the Pirate Weather sponsors who
+keep the free plan alive.

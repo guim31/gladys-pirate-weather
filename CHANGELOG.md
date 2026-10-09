@@ -12,28 +12,20 @@ the notes of the version's GitHub Release.
 
 ### Added
 
-- A working example of scene triggers, scene actions and dashboard widgets
-  (Gladys 5.1.0 or later).
-- `CHANGELOG.md`, rolled by the Release workflow.
-- A GitHub Release for every version, with its changelog section as notes: the
-  Gladys Supervision page links each version to the repository's releases.
-- CI runs the tests on Node 22 and 24, and builds the Docker image.
-- Dependabot keeps the npm dependencies and the GitHub Actions up to date.
-- `SECURITY.md` (how to report a vulnerability) and `CLAUDE.md` (project rules
-  for contributors and coding assistants).
-- Manifest tests: `version` matches `package.json`, `docker_image` is tagged
-  with it, descriptions hold 10 to 100 characters, placeholders are
-  multi-language objects.
-- The latitude and longitude fields show an example value as placeholder.
+- Pirate Weather as the weather provider of Gladys: current conditions, the
+  next 24 hours and the next 8 days, in °F/mph or °C/m/s after each user's
+  unit system, for every house with a location.
+- Official weather alerts (US National Weather Service, Environment Canada,
+  European services through the WMO register) with their severity and
+  phenomenon, for the Gladys "Weather alert" scene trigger; Gladys is told to
+  re-read the weather as soon as the alerts of a house change.
+- Scene trigger "Rain or snow expected within the hour", from the
+  minute-by-minute forecast.
+- Scene action "Get the precipitation of the next hour".
+- Dashboard widget "Precipitation, next hour".
+- Automatic refresh cadence under half of the monthly quota (every 15 minutes
+  for one house on the free plan), adjusted to the calls left reported by
+  Pirate Weather; manual intervals from 15 minutes to 2 hours.
+- "Test the API key" button, showing the calls left this month.
 
-### Changed
-
-- Node.js 22 or later is required (Node 20 is end-of-life).
-
-### Fixed
-
-- The release commit no longer fails `npm run format:check`: the Release
-  workflow updates the manifest `version` and `docker_image` in place instead
-  of re-printing the whole file with `jq`.
-
-[Unreleased]: https://github.com/GladysAssistant/integration-template-js/commits/main
+[Unreleased]: https://github.com/guim31/gladys-pirate-weather/commits/main
