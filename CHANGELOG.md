@@ -10,6 +10,8 @@ the notes of the version's GitHub Release.
 
 ## [Unreleased]
 
+## [1.0.1] - 2026-10-09
+
 ### Added
 
 - Pirate Weather as the weather provider of Gladys: current conditions, the
@@ -28,4 +30,5 @@ the notes of the version's GitHub Release.
   Pirate Weather; manual intervals from 15 minutes to 2 hours.
 - "Test the API key" button, showing the calls left this month.
 
-[Unreleased]: https://github.com/guim31/gladys-pirate-weather/commits/main
+[Unreleased]: https://github.com/guim31/gladys-pirate-weather/compare/v1.0.1...HEAD
+[1.0.1]: https://github.com/guim31/gladys-pirate-weather/releases/tag/v1.0.1
