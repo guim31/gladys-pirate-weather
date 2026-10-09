@@ -31,16 +31,25 @@ pushing.
 ## Architecture
 
 ```
-index.js                          SDK wiring only: handlers registered before connect()
-src/devices/index.js              registry of the device blueprints + dispatch helpers
-src/devices/<type>.js             one device type per file (buildDevice, onPoll, onSetValue...)
-src/scenes.js                     scene action handlers (manifest `scene_actions`)
-src/widgets.js                    dashboard widget handlers (manifest `widgets`)
+index.js                          SDK wiring only: createApp(gladys) then connect()
+src/app.js                        the integration on an injected client: handlers, status, nudges
+src/api.js                        the ONE Pirate Weather call (units=si, version=2, icon=pirate)
+src/forecast.js                   raw response → slim SI forecast (-999 → null, any units → SI)
+src/forecast-store.js             cache per location, shared calls, stale fallback, quota/key blocks
+src/scheduler.js                  the refresh timer (setTimeout chain, one call per location)
+src/budget.js                     the cadence from the quota and the Ratelimit-* headers
+src/pivot.js                      SI forecast → Gladys pivot weather (B.18) in the requested units
+src/conditions.js / alerts.js     icons → conditions, alerts → CAP model (severity, type)
+src/nowcast.js                    the minutely block: wet minutes, intensity, transitions
+src/scene-triggers.js             "precipitation_expected" (manifest `scene_triggers`)
+src/scene-actions.js              "get_precipitation_next_hour" (manifest `scene_actions`)
+src/widget.js                     "precipitation_next_hour" (manifest `widgets`)
 src/config.js                     DEFAULT_CONFIG (mirrors the manifest defaults) + normalization
-src/weather.js                    example driver (Open-Meteo)
-gladys-assistant-integration.json manifest: name, config_schema, actions, image...
+gladys-assistant-integration.json manifest: type weather, location, config_schema, capabilities
 docs/en.md, docs/fr.md            user documentation, re-hosted by Gladys (mandatory)
-test/                             node --test; test/helpers/fakeGladys.js stands in for the SDK
+test/                             node --test; test/helpers/fake-gladys.js stands in for the SDK
+test/fixtures/README.md           which fixtures are real API responses, which are synthetic
+scripts/capture-fixture.mjs       record a real response as a fixture (needs a key)
 .github/scripts/release.mjs       release helpers (manifest bump, changelog), tested in test/
 ```
 
@@ -164,6 +173,47 @@ code de ce dépôt. Compléter ce fichier quand un nouveau piège est découvert
 - Les filtres de scène ne font qu'égalité et appartenance : un seuil reste le travail d'un capteur.
 - **Les clés de widgets, de déclencheurs et d'actions sont figées une fois publiées.**
 - `gladys_version` `>=5.1.0` dès qu'il y a widgets, déclencheurs ou actions de scène.
+
+**Type `weather` (contrat B.18, vérifié dans le code du cœur et le SDK 0.14)**
+
+- Le cœur tronque `alerts` à 10 **avant** de les valider (`normalizeWeather`) : trier soi-même
+  par sévérité et plafonner, sinon une alerte tornade peut tomber derrière dix avis mineurs.
+- Champs du pivot : pas de `visibility` dans `hours`, pas d'`apparent_temperature` dans `days`
+  (jetés). Pourcentages 0–100. `units` vaut `metric` ou `us` (jamais `imperial` en entrée) ; le
+  cœur estampille lui-même `units` dans la réponse. `night` est déprécié : condition réelle +
+  `is_day`.
+- `requestWeatherRefresh()` et `requestWidgetRefresh()` sont **synchrones** (fire-and-forget),
+  le second lève une exception sur une clé de widget mal formée.
+- Le SDK 0.14 publié n'a **pas** l'export `@gladysassistant/integration-sdk/testing`
+  (`createFakeGladys`) que décrit le README de `master` : faux client maison dans
+  `test/helpers/`.
+- `source: "houses"` (sélecteur de maison) n'existe que sur `master` du cœur, dans **aucune**
+  version publiée jusqu'à 5.1.4 : un manifeste qui l'emploie serait refusé. Désigner la maison
+  par un champ `string` (son nom), comme Météo France.
+
+**Pirate Weather**
+
+- L'hôte `api.pirateweather.net` (et `pirateweather.net`) est refusé par le proxy des sessions
+  de code : aucune vraie réponse n'est capturable ici. Les fixtures réelles viennent du dépôt
+  HA et de la doc officielle ; `scripts/capture-fixture.mjs` en enregistre d'autres avec une clé.
+- Valeur manquante = `-999` (heures d'alerte sans début ni fin, `fireIndex`, lever du soleil en
+  nuit polaire) : la filtrer partout, sinon elle part en température.
+- `precipAccumulation` additionne des **cm de neige** et des cm de pluie (5 mm de pluie + 5 cm
+  de neige = 5,5) : utiliser `liquidAccumulation` + `iceAccumulation` + `snowAccumulation`
+  (`version=2`), ou l'intensité moyenne × durée.
+- Les titres d'alertes WMO sont dans la langue du service national (français au Québec,
+  allemand en Allemagne) : classer le phénomène sur plusieurs langues, au début des mots
+  (« event » contient « vent », « gelb » commence comme « gel »).
+- `Intl.NumberFormat('fr-FR')` sépare les milliers par une espace fine insécable (U+202F) :
+  en tenir compte dans les assertions.
+
+**CI**
+
+- Le job « Docker build » échoue en `429 Too Many Requests` en tirant `node:24-alpine` sur Docker
+  Hub (limite des pulls anonymes, IP partagées des runners GitHub) : ce n'est pas le code. Le
+  `Dockerfile` tire donc la même image officielle depuis le miroir ECR Public
+  (`public.ecr.aws/docker/library/node:24-alpine`, même empreinte). Un 429 dans un run passé ne
+  se « corrige » pas autrement : le push suivant relance la CI.
 
 ## Store
 

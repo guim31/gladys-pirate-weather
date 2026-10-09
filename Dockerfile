@@ -8,7 +8,9 @@
 #   - multi-arch image (linux/amd64 + linux/arm64), see the CI workflow
 # -----------------------------------------------------------------------------
 
-FROM node:24-alpine
+# The official Node image, from the AWS public mirror of Docker Hub: same
+# image, without the anonymous pull rate limit that fails the CI builds (429).
+FROM public.ecr.aws/docker/library/node:24-alpine
 
 # dumb-init: handles signals (SIGTERM) correctly for a graceful shutdown.
 RUN apk add --no-cache dumb-init

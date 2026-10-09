@@ -1,0 +1,187 @@
+{
+  "latitude": 37.8267,
+  "longitude": -122.4233,
+  "timezone": "America/Los_Angeles",
+  "offset": -7.0,
+  "elevation": 0,
+  "currently": {
+    "time": 1759697220,
+    "summary": "Clear",
+    "icon": "clear-day",
+    "nearestStormDistance": 340.13,
+    "nearestStormBearing": 282,
+    "precipIntensity": 0.0,
+    "precipProbability": 0.0,
+    "precipIntensityError": 0.0,
+    "precipType": "none",
+    "temperature": 62.64,
+    "apparentTemperature": 57.61,
+    "dewPoint": 58.46,
+    "humidity": 0.85,
+    "pressure": 1009.77,
+    "windSpeed": 13.39,
+    "windGust": 13.78,
+    "windBearing": 254,
+    "cloudCover": 0.02,
+    "uvIndex": 5.69,
+    "visibility": 10.0,
+    "ozone": 288.63,
+    "airQualityIndex": 42,
+    "smoke": 0.01,
+    "fireIndex": 7.33,
+    "feelsLike": 64.6,
+    "currentDayIce": 0.0,
+    "currentDayLiquid": 0.0,
+    "currentDaySnow": 0.0
+  },
+  "minutely": {
+    "summary": "Clear for the hour.",
+    "icon": "clear-day",
+    "data": [
+      {
+        "time": 1759697220,
+        "precipIntensity": 0.0,
+        "precipProbability": 0.0,
+        "precipIntensityError": 0.0,
+        "precipType": "none"
+      }
+    ]
+  },
+  "hourly": {
+    "summary": "Clear throughout the day.",
+    "icon": "clear-day",
+    "data": [
+      {
+        "time": 1759694400,
+        "summary": "Clear",
+        "icon": "clear-day",
+        "precipIntensity": 0.0,
+        "precipProbability": 0.0,
+        "precipIntensityError": 0.0,
+        "precipAccumulation": 0.0,
+        "precipType": "none",
+        "temperature": 64.02,
+        "apparentTemperature": 62.45,
+        "dewPoint": 57.79,
+        "humidity": 0.8,
+        "pressure": 1010.13,
+        "windSpeed": 7.15,
+        "windGust": 9.83,
+        "windBearing": 280,
+        "cloudCover": 0.01,
+        "uvIndex": 5.71,
+        "visibility": 10.0,
+        "ozone": 288.28,
+        "airQualityIndex": 43,
+        "smoke": 0.0,
+        "liquidAccumulation": 0.0,
+        "snowAccumulation": 0.0,
+        "iceAccumulation": 0.0,
+        "nearestStormDistance": 333.8,
+        "nearestStormBearing": 277,
+        "fireIndex": 6.4,
+        "feelsLike": 64.05798461914067
+      }
+    ]
+  },
+  "daily": {
+    "summary": "No precipitation throughout the week, with high temperatures falling to 60°F on Saturday.",
+    "icon": "wind",
+    "data": [
+      {
+        "time": 1759647600,
+        "summary": "Clear starting in the afternoon.",
+        "icon": "clear-day",
+        "dawnTime": 1759671764,
+        "sunriseTime": 1759673369,
+        "sunsetTime": 1759715147,
+        "duskTime": 1759716750,
+        "moonPhase": 0.43,
+        "precipIntensity": 0.0,
+        "precipIntensityMax": 0.0,
+        "precipIntensityMaxTime": 1759647600,
+        "precipProbability": 0.0,
+        "precipAccumulation": 0.0,
+        "precipType": "rain",
+        "temperatureHigh": 65.14,
+        "temperatureHighTime": 1759698000,
+        "temperatureLow": 60.64,
+        "temperatureLowTime": 1759755600,
+        "apparentTemperatureHigh": 62.94,
+        "apparentTemperatureHighTime": 1759698000,
+        "apparentTemperatureLow": 59.38,
+        "apparentTemperatureLowTime": 1759755600,
+        "dewPoint": 56.83,
+        "humidity": 0.85,
+        "pressure": 1010.37,
+        "windSpeed": 6.07,
+        "windGust": 8.99,
+        "windGustTime": 1759708800,
+        "windBearing": 247,
+        "cloudCover": 0.14,
+        "uvIndex": 5.71,
+        "uvIndexTime": 1759694400,
+        "visibility": 10.0,
+        "temperatureMin": 57.96,
+        "temperatureMinTime": 1759669200,
+        "temperatureMax": 65.14,
+        "temperatureMaxTime": 1759698000,
+        "apparentTemperatureMin": 57.1,
+        "apparentTemperatureMinTime": 1759669200,
+        "apparentTemperatureMax": 62.94,
+        "apparentTemperatureMaxTime": 1759698000,
+        "airQualityIndex": 44,
+        "smokeMax": 0.01,
+        "smokeMaxTime": 1759698000,
+        "liquidAccumulation": 0.0,
+        "snowAccumulation": 0.0,
+        "iceAccumulation": 0.0,
+        "fireIndexMax": 11.2,
+        "fireIndexMaxTime": 1759708800
+      }
+    ]
+  },
+  "alerts": [],
+  "flags": {
+    "sources": ["ETOPO1", "gfs", "hrrrsubh", "hrrr_0-18", "nbm", "nbm_fire", "hrrr_18-48", "gefs"],
+    "sourceTimes": {
+      "hrrr_subh": "2025-10-05 18Z",
+      "hrrr_0-18": "2025-10-05 18Z",
+      "nbm": "2025-10-05 17Z",
+      "nbm_fire": "2025-10-05 12Z",
+      "hrrr_18-48": "2025-10-05 18Z",
+      "gfs": "2025-10-05 06Z",
+      "gefs": "2025-10-05 12Z"
+    },
+    "nearest-station": 0,
+    "units": "us",
+    "version": "V2.7.9",
+    "sourceIDX": {
+      "hrrr": {
+        "x": 178,
+        "y": 602,
+        "lat": 37.82,
+        "lon": -122.43
+      },
+      "gfs": {
+        "x": 950,
+        "y": 511,
+        "lat": 37.75,
+        "lon": -122.5
+      },
+      "nbm": {
+        "x": 321,
+        "y": 768,
+        "lat": 37.82,
+        "lon": -122.42
+      },
+      "etopo": {
+        "x": 3455,
+        "y": 7670,
+        "lat": 37.8334,
+        "lon": -122.4167
+      }
+    },
+    "processTime": 20787
+  }
+}
