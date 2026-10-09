@@ -1,6 +1,6 @@
 {
   "name": "gladys-pirate-weather",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "private": true,
   "description": "Pirate Weather provider for Gladys Assistant: forecasts, minute-by-minute precipitation and official weather alerts.",
   "type": "module",

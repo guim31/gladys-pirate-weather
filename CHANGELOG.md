@@ -10,6 +10,8 @@ the notes of the version's GitHub Release.
 
 ## [Unreleased]
 
+## [1.0.2] - 2026-10-09
+
 ## [1.0.1] - 2026-10-09
 
 ### Added
@@ -30,5 +32,6 @@ the notes of the version's GitHub Release.
   Pirate Weather; manual intervals from 15 minutes to 2 hours.
 - "Test the API key" button, showing the calls left this month.
 
-[Unreleased]: https://github.com/guim31/gladys-pirate-weather/compare/v1.0.1...HEAD
+[Unreleased]: https://github.com/guim31/gladys-pirate-weather/compare/v1.0.2...HEAD
+[1.0.2]: https://github.com/guim31/gladys-pirate-weather/compare/v1.0.1...v1.0.2
 [1.0.1]: https://github.com/guim31/gladys-pirate-weather/releases/tag/v1.0.1
