@@ -32,7 +32,7 @@ import { buildWeather } from './pivot.js';
 import { SCENE_ACTIONS, precipitationNextHour } from './scene-actions.js';
 import { createPrecipitationWatcher } from './scene-triggers.js';
 import { createScheduler } from './scheduler.js';
-import { formatCount, resolveLanguage } from './texts.js';
+import { formatCount, localized, resolveLanguage, t } from './texts.js';
 import { fromSI } from './units.js';
 import { WIDGETS, buildUnavailableContent, buildWidgetContent } from './widget.js';
 
@@ -56,48 +56,33 @@ function connectionStatus({ config, summary, usage }) {
   if (config.api_key === '') {
     return {
       connected: false,
-      message: {
-        en: 'Enter your free Pirate Weather API key in the configuration.',
-        fr: 'Saisissez votre clé d’API Pirate Weather gratuite dans la configuration.',
-      },
+      message: localized('statusNoKey'),
     };
   }
   const error = summary?.error ?? null;
   if (error?.kind === ERROR_KINDS.AUTH) {
     return {
       connected: false,
-      message: {
-        en: 'Pirate Weather refused the API key. Check it, and that the forecast API is subscribed (allow 20 minutes after signing up).',
-        fr: 'Pirate Weather refuse la clé d’API. Vérifiez-la, et que l’API forecast est souscrite (comptez 20 minutes après l’inscription).',
-      },
+      message: localized('statusKeyRefused'),
     };
   }
   if (error?.kind === ERROR_KINDS.QUOTA || summary?.plan?.reason === PLAN_REASONS.PAUSED) {
     const reset = usage?.resetAt ? new Date(usage.resetAt).toISOString().slice(0, 10) : null;
     return {
       connected: false,
-      message: {
-        en: `Monthly Pirate Weather quota spent: refreshes resume after its reset${reset ? ` (${reset})` : ''}.`,
-        fr: `Quota mensuel Pirate Weather épuisé : les mises à jour reprennent après sa remise à zéro${reset ? ` (${reset})` : ''}.`,
-      },
+      message: localized('statusQuotaSpent', { reset: reset ? ` (${reset})` : '' }),
     };
   }
   if (summary !== null && summary.houses === 0) {
     return {
       connected: false,
-      message: {
-        en: 'No house of Gladys has a location: set it in Settings → Houses.',
-        fr: 'Aucune maison de Gladys n’a de position : renseignez-la dans Paramètres → Maisons.',
-      },
+      message: localized('statusNoLocatedHouse'),
     };
   }
   if (error !== null && summary.refreshed === 0) {
     return {
       connected: false,
-      message: {
-        en: 'Pirate Weather is unreachable for now: retrying in a few minutes.',
-        fr: 'Pirate Weather est injoignable pour le moment : nouvel essai dans quelques minutes.',
-      },
+      message: localized('statusUnreachable'),
     };
   }
   return { connected: true };
@@ -290,11 +275,7 @@ function createApp(
         });
       } catch (err) {
         logger.warn(`Widget content unavailable: ${err.message}`);
-        return buildUnavailableContent(
-          lang === 'fr'
-            ? `Prévision indisponible : ${err.message}`
-            : `Forecast unavailable: ${err.message}`,
-        );
+        return buildUnavailableContent(t('widgetUnavailable', lang, { reason: err.message }));
       }
     },
   );
@@ -318,21 +299,20 @@ function createApp(
     const usage = store.usage;
     const quota = (lang) =>
       usage?.remaining !== null && usage?.remaining !== undefined && usage?.limit
-        ? lang === 'fr'
-          ? ` Appels restants ce mois-ci : ${formatCount(usage.remaining, 'fr')} sur ${formatCount(usage.limit, 'fr')}.`
-          : ` Calls left this month: ${formatCount(usage.remaining, 'en')} of ${formatCount(usage.limit, 'en')}.`
+        ? t('testQuota', lang, {
+            remaining: formatCount(usage.remaining, lang),
+            limit: formatCount(usage.limit, lang),
+          })
         : '';
     const interval = scheduler.lastPlan?.intervalMinutes;
-    const cadence = (lang) =>
-      interval
-        ? lang === 'fr'
-          ? ` Mise à jour toutes les ${interval} min.`
-          : ` Refreshing every ${interval} min.`
-        : '';
-    return {
-      en: `It works: ${us} °F (${metric} °C) now at ${place}.${quota('en')}${cadence('en')}`,
-      fr: `Ça fonctionne : ${metric} °C en ce moment à ${place}.${quota('fr')}${cadence('fr')}`,
-    };
+    const cadence = (lang) => (interval ? t('testCadence', lang, { minutes: interval }) : '');
+    return localized('testWorks', (lang) => ({
+      us,
+      metric,
+      place,
+      quota: quota(lang),
+      cadence: cadence(lang),
+    }));
   });
 
   // --- Configuration ---------------------------------------------------------

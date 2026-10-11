@@ -18,7 +18,7 @@ test('the select values are kept when valid, defaulted otherwise', () => {
   assert.equal(config.language, 'fr');
   assert.equal(normalizeConfig({ refresh_interval: 30 }).refresh_interval, '30');
   assert.equal(normalizeConfig({ refresh_interval: '5' }).refresh_interval, 'auto');
-  assert.equal(normalizeConfig({ language: 'de' }).language, 'auto');
+  assert.equal(normalizeConfig({ language: 'it' }).language, 'auto');
 });
 
 test('manualIntervalMinutes: null for automatic, minutes otherwise', () => {

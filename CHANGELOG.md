@@ -10,6 +10,12 @@ the notes of the version's GitHub Release.
 
 ## [Unreleased]
 
+### Added
+
+- German and Spanish: the configuration form, the scene trigger and action,
+  the widget, the status messages, the "Test the API key" answer and the
+  scene sentences, which can now be set to German or Spanish too.
+
 ## [1.0.2] - 2026-10-09
 
 ## [1.0.1] - 2026-10-09
