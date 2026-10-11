@@ -94,6 +94,20 @@ test('"auto" language follows the last request of the core', async () => {
   assert.match(outputs.summary, /^Pluie forte/);
 });
 
+test('"auto" language follows a German or Spanish Gladys too', async () => {
+  const { fake } = await start();
+  await fake.weatherGet({ ...HOUSES.okc, language: 'de', units: 'metric' });
+  assert.match(
+    (await fake.sceneAction('get_precipitation_next_hour', {})).summary,
+    /^Starker Regen/,
+  );
+  await fake.weatherGet({ ...HOUSES.okc, language: 'es', units: 'metric' });
+  assert.match(
+    (await fake.sceneAction('get_precipitation_next_hour', {})).summary,
+    /^Lluvia fuerte/,
+  );
+});
+
 test('the widget shows the chart of the house in the units of the viewer', async () => {
   const { fake } = await start();
   const content = await fake.widgetGet('precipitation_next_hour', {
@@ -123,6 +137,14 @@ test('the test button answers with the weather, the quota and the cadence', asyn
   assert.equal(
     message.fr.replace(/\u202f/g, ' '),
     'Ça fonctionne : 33.2 °C en ce moment à Home (Oklahoma City). Appels restants ce mois-ci : 9 412 sur 10 000. Mise à jour toutes les 15 min.',
+  );
+  assert.equal(
+    message.de,
+    'Es funktioniert: gerade 33.2 °C in Home (Oklahoma City). Verbleibende Aufrufe in diesem Monat: 9.412 von 10.000. Aktualisierung alle 15 Min.',
+  );
+  assert.equal(
+    message.es,
+    'Funciona: 33.2 °C en este momento en Home (Oklahoma City). Llamadas restantes este mes: 9412 de 10.000. Actualización cada 15 min.',
   );
 });
 

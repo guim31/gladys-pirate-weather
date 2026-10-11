@@ -66,7 +66,8 @@ settings of the weather widget.
   below). The manual choices go from every 15 minutes to every 2 hours.
 - **Language of the scene texts** — the language of the sentences the
   integration writes in scene variables ("Heavy rain expected in 12 minutes
-  (90% chance)."). **Automatic** follows the language of your Gladys.
+  (90% chance)."): English, French, German or Spanish. **Automatic** follows
+  the language of your Gladys.
 
 ## How often the weather is refreshed, and your quota
 

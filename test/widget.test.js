@@ -16,7 +16,7 @@ function entry(name, now) {
 
 test('the chart content is rendered exactly as sent, in both unit systems and languages', () => {
   for (const units of ['us', 'metric']) {
-    for (const language of ['en', 'fr']) {
+    for (const language of ['en', 'fr', 'de', 'es']) {
       const content = buildWidgetContent({
         house: HOUSES.okc,
         entry: entry('synthetic-oklahoma-city-nws-alerts.json', OKC_NOW),

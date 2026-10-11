@@ -15,7 +15,7 @@
 
 import { WIDGET_CHART_TYPES, WIDGET_COLORS } from '@gladysassistant/integration-sdk';
 import { readNowcast } from './nowcast.js';
-import { nowcastSentence } from './texts.js';
+import { LOCALES, nowcastSentence, t } from './texts.js';
 import { fromSI, intensityUnit } from './units.js';
 
 const WIDGETS = Object.freeze({ PRECIPITATION_NEXT_HOUR: 'precipitation_next_hour' });
@@ -27,7 +27,7 @@ const TTL_SECONDS = 600;
  * @description Format a time in the time zone of the forecast.
  * @param {number} ms - The time, in ms.
  * @param {string|null} timeZone - The IANA time zone of the location.
- * @param {string} language - 'en' or 'fr'.
+ * @param {string} language - 'en', 'fr', 'de' or 'es'.
  * @returns {string} "2:05 PM" or "14:05".
  * @example
  * formatTime(Date.now(), 'America/Chicago', 'en');
@@ -35,13 +35,13 @@ const TTL_SECONDS = 600;
 function formatTime(ms, timeZone, language) {
   const options = { hour: 'numeric', minute: '2-digit' };
   try {
-    return new Intl.DateTimeFormat(language === 'fr' ? 'fr-FR' : 'en-US', {
+    return new Intl.DateTimeFormat(LOCALES[language] ?? LOCALES.en, {
       ...options,
       timeZone: timeZone ?? undefined,
     }).format(ms);
   } catch {
     // An unknown time zone name: the container's (Gladys injects TZ).
-    return new Intl.DateTimeFormat(language === 'fr' ? 'fr-FR' : 'en-US', options).format(ms);
+    return new Intl.DateTimeFormat(LOCALES[language] ?? LOCALES.en, options).format(ms);
   }
 }
 
@@ -51,14 +51,13 @@ function formatTime(ms, timeZone, language) {
  * @param {object} options.house - The house shown.
  * @param {object} options.entry - Its store entry `{ forecast, fetchedAt }`.
  * @param {string} options.units - 'metric' or 'us'.
- * @param {string} options.language - 'en' or 'fr'.
+ * @param {string} options.language - 'en', 'fr', 'de' or 'es'.
  * @param {number} [options.now] - The current time in ms.
  * @returns {object} The widget content.
  * @example
  * buildWidgetContent({ house, entry, units: 'us', language: 'en' });
  */
 function buildWidgetContent({ house, entry, units, language, now = Date.now() }) {
-  const fr = language === 'fr';
   const nowcast = readNowcast(entry.forecast, Math.floor(now / 1000));
   const components = [{ type: 'text', variant: 'body', text: nowcastSentence(nowcast, language) }];
 
@@ -67,11 +66,11 @@ function buildWidgetContent({ house, entry, units, language, now = Date.now() })
     components.push({
       type: 'chart',
       chart_type: WIDGET_CHART_TYPES.BAR,
-      title: fr ? 'Précipitations, 60 prochaines minutes' : 'Precipitation, next 60 minutes',
+      title: t('widgetChartTitle', language),
       unit: intensityUnit(units),
       series: [
         {
-          name: fr ? 'Intensité' : 'Intensity',
+          name: t('widgetIntensity', language),
           points: nowcast.points.map((point) => ({
             t: new Date(point.time * 1000).toISOString(),
             v: convert.intensity(point.intensity) ?? 0,
@@ -85,12 +84,12 @@ function buildWidgetContent({ house, entry, units, language, now = Date.now() })
     type: 'status',
     items: [
       {
-        label: fr ? 'Maison' : 'House',
+        label: t('widgetHouse', language),
         value: house.name,
         color: WIDGET_COLORS.NEUTRAL,
       },
       {
-        label: fr ? 'Prévision de' : 'Forecast from',
+        label: t('widgetForecastFrom', language),
         value: formatTime(entry.fetchedAt, entry.forecast.timezone, language),
         color: WIDGET_COLORS.NEUTRAL,
       },

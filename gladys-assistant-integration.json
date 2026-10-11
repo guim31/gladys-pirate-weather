@@ -4,7 +4,9 @@
   "name": "Pirate Weather",
   "description": {
     "en": "Worldwide forecasts, minute-by-minute rain and official weather alerts, with a free API key.",
-    "fr": "Prévisions mondiales, pluie minute par minute et alertes météo officielles, clé d'API gratuite."
+    "fr": "Prévisions mondiales, pluie minute par minute et alertes météo officielles, clé d'API gratuite.",
+    "de": "Weltweite Vorhersagen, minutengenauer Regen und amtliche Wetterwarnungen, kostenloser API-Schlüssel.",
+    "es": "Pronósticos mundiales, lluvia minuto a minuto y alertas oficiales, con clave de API gratuita."
   },
   "version": "1.0.2",
   "docker_image": "ghcr.io/guim31/gladys-pirate-weather:1.0.2",
@@ -17,78 +19,207 @@
     {
       "key": "intro",
       "type": "section",
-      "label": { "en": "Get your free API key", "fr": "Obtenez votre clé d'API gratuite" },
+      "label": {
+        "en": "Get your free API key",
+        "fr": "Obtenez votre clé d'API gratuite",
+        "de": "Hol dir deinen kostenlosen API-Schlüssel",
+        "es": "Obtenga su clave de API gratuita"
+      },
       "description": {
         "en": "Sign up on pirateweather.net, subscribe to the free forecast API (10,000 calls a month) and paste your key below. It can take up to 20 minutes before a new key works. Powered by Pirate Weather; this integration is not affiliated with Pirate Weather.",
-        "fr": "Inscrivez-vous sur pirateweather.net, souscrivez à l'API forecast gratuite (10 000 appels par mois) et collez votre clé ci-dessous. Une nouvelle clé peut mettre jusqu'à 20 minutes à fonctionner. Powered by Pirate Weather ; cette intégration n'est pas affiliée à Pirate Weather."
+        "fr": "Inscrivez-vous sur pirateweather.net, souscrivez à l'API forecast gratuite (10 000 appels par mois) et collez votre clé ci-dessous. Une nouvelle clé peut mettre jusqu'à 20 minutes à fonctionner. Powered by Pirate Weather ; cette intégration n'est pas affiliée à Pirate Weather.",
+        "de": "Registriere dich auf pirateweather.net, abonniere die kostenlose Forecast-API (10.000 Aufrufe pro Monat) und füge deinen Schlüssel unten ein. Ein neuer Schlüssel kann bis zu 20 Minuten brauchen, bis er funktioniert. Powered by Pirate Weather; diese Integration steht in keiner Verbindung zu Pirate Weather.",
+        "es": "Regístrese en pirateweather.net, suscríbase a la API forecast gratuita (10 000 llamadas al mes) y pegue su clave a continuación. Una clave nueva puede tardar hasta 20 minutos en funcionar. Powered by Pirate Weather; esta integración no está afiliada a Pirate Weather."
       },
       "links": [
         {
           "url": "https://pirateweather.net/",
-          "label": { "en": "Get a free API key", "fr": "Obtenir une clé gratuite" }
+          "label": {
+            "en": "Get a free API key",
+            "fr": "Obtenir une clé gratuite",
+            "de": "Kostenlosen Schlüssel holen",
+            "es": "Obtener una clave gratuita"
+          }
         },
         {
           "url": "https://docs.pirateweather.net/en/latest/CheckUsage/",
-          "label": { "en": "Check your API usage", "fr": "Voir votre consommation" }
+          "label": {
+            "en": "Check your API usage",
+            "fr": "Voir votre consommation",
+            "de": "Deinen Verbrauch ansehen",
+            "es": "Ver su consumo"
+          }
         }
       ]
     },
     {
       "key": "api_key",
       "type": "secret",
-      "label": { "en": "Pirate Weather API key", "fr": "Clé d'API Pirate Weather" },
+      "label": {
+        "en": "Pirate Weather API key",
+        "fr": "Clé d'API Pirate Weather",
+        "de": "Pirate Weather API-Schlüssel",
+        "es": "Clave de API de Pirate Weather"
+      },
       "description": {
         "en": "The key shown in your Pirate Weather account. It is only sent to Pirate Weather.",
-        "fr": "La clé affichée dans votre compte Pirate Weather. Elle n'est envoyée qu'à Pirate Weather."
+        "fr": "La clé affichée dans votre compte Pirate Weather. Elle n'est envoyée qu'à Pirate Weather.",
+        "de": "Der Schlüssel aus deinem Pirate Weather-Konto. Er wird nur an Pirate Weather gesendet.",
+        "es": "La clave que aparece en su cuenta de Pirate Weather. Solo se envía a Pirate Weather."
       },
-      "placeholder": { "en": "Your API key", "fr": "Votre clé d'API" },
+      "placeholder": {
+        "en": "Your API key",
+        "fr": "Votre clé d'API",
+        "de": "Dein API-Schlüssel",
+        "es": "Su clave de API"
+      },
       "required": true
     },
     {
       "key": "refresh_interval",
       "type": "select",
-      "label": { "en": "Refresh interval", "fr": "Fréquence de mise à jour" },
+      "label": {
+        "en": "Refresh interval",
+        "fr": "Fréquence de mise à jour",
+        "de": "Aktualisierungsintervall",
+        "es": "Frecuencia de actualización"
+      },
       "description": {
         "en": "Automatic keeps the refreshes under half of your monthly quota: every 15 minutes for one house on the free plan. Each refresh costs one call per house.",
-        "fr": "Automatique garde les mises à jour sous la moitié de votre quota mensuel : toutes les 15 minutes pour une maison avec l'offre gratuite. Chaque mise à jour coûte un appel par maison."
+        "fr": "Automatique garde les mises à jour sous la moitié de votre quota mensuel : toutes les 15 minutes pour une maison avec l'offre gratuite. Chaque mise à jour coûte un appel par maison.",
+        "de": "Automatisch hält die Aktualisierungen unter der Hälfte deines Monatskontingents: alle 15 Minuten für ein Zuhause im kostenlosen Tarif. Jede Aktualisierung kostet einen Aufruf pro Zuhause.",
+        "es": "Automático mantiene las actualizaciones por debajo de la mitad de su cuota mensual: cada 15 minutos para una casa con el plan gratuito. Cada actualización cuesta una llamada por casa."
       },
       "required": false,
       "default": "auto",
       "options": [
         {
           "value": "auto",
-          "label": { "en": "Automatic (recommended)", "fr": "Automatique (recommandé)" }
+          "label": {
+            "en": "Automatic (recommended)",
+            "fr": "Automatique (recommandé)",
+            "de": "Automatisch (empfohlen)",
+            "es": "Automático (recomendado)"
+          }
         },
-        { "value": "15", "label": { "en": "Every 15 minutes", "fr": "Toutes les 15 minutes" } },
-        { "value": "30", "label": { "en": "Every 30 minutes", "fr": "Toutes les 30 minutes" } },
-        { "value": "60", "label": { "en": "Every hour", "fr": "Toutes les heures" } },
-        { "value": "120", "label": { "en": "Every 2 hours", "fr": "Toutes les 2 heures" } }
+        {
+          "value": "15",
+          "label": {
+            "en": "Every 15 minutes",
+            "fr": "Toutes les 15 minutes",
+            "de": "Alle 15 Minuten",
+            "es": "Cada 15 minutos"
+          }
+        },
+        {
+          "value": "30",
+          "label": {
+            "en": "Every 30 minutes",
+            "fr": "Toutes les 30 minutes",
+            "de": "Alle 30 Minuten",
+            "es": "Cada 30 minutos"
+          }
+        },
+        {
+          "value": "60",
+          "label": {
+            "en": "Every hour",
+            "fr": "Toutes les heures",
+            "de": "Stündlich",
+            "es": "Cada hora"
+          }
+        },
+        {
+          "value": "120",
+          "label": {
+            "en": "Every 2 hours",
+            "fr": "Toutes les 2 heures",
+            "de": "Alle 2 Stunden",
+            "es": "Cada 2 horas"
+          }
+        }
       ]
     },
     {
       "key": "language",
       "type": "select",
-      "label": { "en": "Language of the scene texts", "fr": "Langue des textes de scène" },
+      "label": {
+        "en": "Language of the scene texts",
+        "fr": "Langue des textes de scène",
+        "de": "Sprache der Szenentexte",
+        "es": "Idioma de los textos de escena"
+      },
       "description": {
         "en": "Language of the sentences the integration puts in scene variables. Automatic follows the language of your Gladys.",
-        "fr": "Langue des phrases que l'intégration met dans les variables de scène. Automatique suit la langue de votre Gladys."
+        "fr": "Langue des phrases que l'intégration met dans les variables de scène. Automatique suit la langue de votre Gladys.",
+        "de": "Sprache der Sätze, die die Integration in Szenenvariablen schreibt. Automatisch folgt der Sprache deines Gladys.",
+        "es": "Idioma de las frases que la integración pone en las variables de escena. Automático sigue el idioma de su Gladys."
       },
       "required": false,
       "default": "auto",
       "options": [
-        { "value": "auto", "label": { "en": "Automatic", "fr": "Automatique" } },
-        { "value": "en", "label": { "en": "English", "fr": "Anglais" } },
-        { "value": "fr", "label": { "en": "French", "fr": "Français" } }
+        {
+          "value": "auto",
+          "label": {
+            "en": "Automatic",
+            "fr": "Automatique",
+            "de": "Automatisch",
+            "es": "Automático"
+          }
+        },
+        {
+          "value": "en",
+          "label": {
+            "en": "English",
+            "fr": "Anglais",
+            "de": "Englisch",
+            "es": "Inglés"
+          }
+        },
+        {
+          "value": "fr",
+          "label": {
+            "en": "French",
+            "fr": "Français",
+            "de": "Französisch",
+            "es": "Francés"
+          }
+        },
+        {
+          "value": "de",
+          "label": {
+            "en": "German",
+            "fr": "Allemand",
+            "de": "Deutsch",
+            "es": "Alemán"
+          }
+        },
+        {
+          "value": "es",
+          "label": {
+            "en": "Spanish",
+            "fr": "Espagnol",
+            "de": "Spanisch",
+            "es": "Español"
+          }
+        }
       ]
     }
   ],
   "actions": [
     {
       "key": "test_connection",
-      "label": { "en": "Test the API key", "fr": "Tester la clé d'API" },
+      "label": {
+        "en": "Test the API key",
+        "fr": "Tester la clé d'API",
+        "de": "API-Schlüssel testen",
+        "es": "Probar la clave de API"
+      },
       "description": {
         "en": "Fetches the weather of your house now (one call) and shows the calls left this month.",
-        "fr": "Récupère la météo de votre maison maintenant (un appel) et affiche les appels restants ce mois-ci."
+        "fr": "Récupère la météo de votre maison maintenant (un appel) et affiche les appels restants ce mois-ci.",
+        "de": "Ruft jetzt das Wetter deines Zuhauses ab (ein Aufruf) und zeigt die in diesem Monat verbleibenden Aufrufe.",
+        "es": "Obtiene ahora el tiempo de su casa (una llamada) y muestra las llamadas restantes de este mes."
       },
       "timeout_seconds": 20
     }
@@ -98,66 +229,155 @@
       "key": "precipitation_expected",
       "label": {
         "en": "Rain or snow expected within the hour",
-        "fr": "Pluie ou neige attendue dans l'heure"
+        "fr": "Pluie ou neige attendue dans l'heure",
+        "de": "Regen oder Schnee in der nächsten Stunde erwartet",
+        "es": "Lluvia o nieve prevista en la próxima hora"
       },
       "description": {
         "en": "The minute-by-minute forecast now shows precipitation within the hour, where the previous refresh showed none.",
-        "fr": "La prévision minute par minute annonce des précipitations dans l'heure, là où la mise à jour précédente n'en annonçait pas."
+        "fr": "La prévision minute par minute annonce des précipitations dans l'heure, là où la mise à jour précédente n'en annonçait pas.",
+        "de": "Die minutengenaue Vorhersage zeigt jetzt Niederschlag in der nächsten Stunde, wo die vorherige Aktualisierung keinen zeigte.",
+        "es": "El pronóstico minuto a minuto indica ahora precipitaciones en la próxima hora, donde la actualización anterior no las indicaba."
       },
       "fields": [
         {
           "key": "house",
           "type": "string",
-          "label": { "en": "House", "fr": "Maison" },
+          "label": {
+            "en": "House",
+            "fr": "Maison",
+            "de": "Zuhause",
+            "es": "Casa"
+          },
           "description": {
             "en": "Name of the house, exactly as shown in Gladys. Leave empty for every house.",
-            "fr": "Nom de la maison, exactement comme dans Gladys. Laissez vide pour toutes les maisons."
+            "fr": "Nom de la maison, exactement comme dans Gladys. Laissez vide pour toutes les maisons.",
+            "de": "Name des Zuhauses, genau wie in Gladys angezeigt. Leer lassen für jedes Zuhause.",
+            "es": "Nombre de la casa, exactamente como aparece en Gladys. Déjelo vacío para todas las casas."
           },
           "required": false
         },
         {
           "key": "precipitation_type",
           "type": "multi_select",
-          "label": { "en": "Precipitation", "fr": "Précipitations" },
+          "label": {
+            "en": "Precipitation",
+            "fr": "Précipitations",
+            "de": "Niederschlag",
+            "es": "Precipitaciones"
+          },
           "description": {
             "en": "Leave empty for any precipitation.",
-            "fr": "Laissez vide pour toutes les précipitations."
+            "fr": "Laissez vide pour toutes les précipitations.",
+            "de": "Leer lassen für jeden Niederschlag.",
+            "es": "Déjelo vacío para cualquier precipitación."
           },
           "required": false,
           "options": [
-            { "value": "rain", "label": { "en": "Rain", "fr": "Pluie" } },
-            { "value": "snow", "label": { "en": "Snow", "fr": "Neige" } },
-            { "value": "sleet", "label": { "en": "Sleet", "fr": "Grésil" } },
+            {
+              "value": "rain",
+              "label": {
+                "en": "Rain",
+                "fr": "Pluie",
+                "de": "Regen",
+                "es": "Lluvia"
+              }
+            },
+            {
+              "value": "snow",
+              "label": {
+                "en": "Snow",
+                "fr": "Neige",
+                "de": "Schnee",
+                "es": "Nieve"
+              }
+            },
+            {
+              "value": "sleet",
+              "label": {
+                "en": "Sleet",
+                "fr": "Grésil",
+                "de": "Schneeregen",
+                "es": "Aguanieve"
+              }
+            },
             {
               "value": "freezing_rain",
-              "label": { "en": "Freezing rain", "fr": "Pluie verglaçante" }
+              "label": {
+                "en": "Freezing rain",
+                "fr": "Pluie verglaçante",
+                "de": "Gefrierender Regen",
+                "es": "Lluvia engelante"
+              }
             }
           ]
         },
         {
           "key": "intensity",
           "type": "multi_select",
-          "label": { "en": "Intensity", "fr": "Intensité" },
+          "label": {
+            "en": "Intensity",
+            "fr": "Intensité",
+            "de": "Intensität",
+            "es": "Intensidad"
+          },
           "description": {
             "en": "Strongest intensity expected. Leave empty for any intensity.",
-            "fr": "Intensité la plus forte attendue. Laissez vide pour toute intensité."
+            "fr": "Intensité la plus forte attendue. Laissez vide pour toute intensité.",
+            "de": "Stärkste erwartete Intensität. Leer lassen für jede Intensität.",
+            "es": "Intensidad más fuerte prevista. Déjelo vacío para cualquier intensidad."
           },
           "required": false,
           "options": [
-            { "value": "light", "label": { "en": "Light", "fr": "Faible" } },
-            { "value": "moderate", "label": { "en": "Moderate", "fr": "Modérée" } },
-            { "value": "heavy", "label": { "en": "Heavy", "fr": "Forte" } }
+            {
+              "value": "light",
+              "label": {
+                "en": "Light",
+                "fr": "Faible",
+                "de": "Leicht",
+                "es": "Débil"
+              }
+            },
+            {
+              "value": "moderate",
+              "label": {
+                "en": "Moderate",
+                "fr": "Modérée",
+                "de": "Mäßig",
+                "es": "Moderada"
+              }
+            },
+            {
+              "value": "heavy",
+              "label": {
+                "en": "Heavy",
+                "fr": "Forte",
+                "de": "Stark",
+                "es": "Fuerte"
+              }
+            }
           ]
         }
       ],
       "variables": [
-        { "key": "house", "type": "string", "label": { "en": "House", "fr": "Maison" } },
+        {
+          "key": "house",
+          "type": "string",
+          "label": {
+            "en": "House",
+            "fr": "Maison",
+            "de": "Zuhause",
+            "es": "Casa"
+          }
+        },
         {
           "key": "precipitation_type",
           "type": "string",
           "label": {
             "en": "Precipitation (rain, snow, sleet, freezing_rain)",
-            "fr": "Précipitations (rain, snow, sleet, freezing_rain)"
+            "fr": "Précipitations (rain, snow, sleet, freezing_rain)",
+            "de": "Niederschlag (rain, snow, sleet, freezing_rain)",
+            "es": "Precipitaciones (rain, snow, sleet, freezing_rain)"
           }
         },
         {
@@ -165,26 +385,45 @@
           "type": "string",
           "label": {
             "en": "Intensity (light, moderate, heavy)",
-            "fr": "Intensité (light, moderate, heavy)"
+            "fr": "Intensité (light, moderate, heavy)",
+            "de": "Intensität (light, moderate, heavy)",
+            "es": "Intensidad (light, moderate, heavy)"
           }
         },
         {
           "key": "minutes_until",
           "type": "number",
-          "label": { "en": "Minutes until it starts", "fr": "Minutes avant le début" }
+          "label": {
+            "en": "Minutes until it starts",
+            "fr": "Minutes avant le début",
+            "de": "Minuten bis zum Beginn",
+            "es": "Minutos hasta el inicio"
+          }
         },
         {
           "key": "probability",
           "type": "number",
-          "label": { "en": "Probability (%)", "fr": "Probabilité (%)" }
+          "label": {
+            "en": "Probability (%)",
+            "fr": "Probabilité (%)",
+            "de": "Wahrscheinlichkeit (%)",
+            "es": "Probabilidad (%)"
+          }
         },
         {
           "key": "summary",
           "type": "string",
-          "label": { "en": "Summary", "fr": "Résumé" },
+          "label": {
+            "en": "Summary",
+            "fr": "Résumé",
+            "de": "Zusammenfassung",
+            "es": "Resumen"
+          },
           "description": {
             "en": "A sentence ready to put in a message.",
-            "fr": "Une phrase prête à mettre dans un message."
+            "fr": "Une phrase prête à mettre dans un message.",
+            "de": "Ein Satz, fertig für eine Nachricht.",
+            "es": "Una frase lista para incluir en un mensaje."
           }
         }
       ]
@@ -195,21 +434,32 @@
       "key": "get_precipitation_next_hour",
       "label": {
         "en": "Get the precipitation of the next hour",
-        "fr": "Obtenir les précipitations de l'heure à venir"
+        "fr": "Obtenir les précipitations de l'heure à venir",
+        "de": "Niederschlag der nächsten Stunde abrufen",
+        "es": "Obtener las precipitaciones de la próxima hora"
       },
       "description": {
         "en": "Reads the minute-by-minute forecast of a house, to act if rain or snow is coming.",
-        "fr": "Lit la prévision minute par minute d'une maison, pour agir si de la pluie ou de la neige arrive."
+        "fr": "Lit la prévision minute par minute d'une maison, pour agir si de la pluie ou de la neige arrive.",
+        "de": "Liest die minutengenaue Vorhersage eines Zuhauses, um zu reagieren, wenn Regen oder Schnee kommt.",
+        "es": "Lee el pronóstico minuto a minuto de una casa, para actuar si llega lluvia o nieve."
       },
       "timeout_seconds": 20,
       "fields": [
         {
           "key": "house",
           "type": "string",
-          "label": { "en": "House", "fr": "Maison" },
+          "label": {
+            "en": "House",
+            "fr": "Maison",
+            "de": "Zuhause",
+            "es": "Casa"
+          },
           "description": {
             "en": "Name of the house, exactly as shown in Gladys. Leave empty for your first house.",
-            "fr": "Nom de la maison, exactement comme dans Gladys. Laissez vide pour votre première maison."
+            "fr": "Nom de la maison, exactement comme dans Gladys. Laissez vide pour votre première maison.",
+            "de": "Name des Zuhauses, genau wie in Gladys angezeigt. Leer lassen für dein erstes Zuhause.",
+            "es": "Nombre de la casa, exactamente como aparece en Gladys. Déjelo vacío para su primera casa."
           },
           "required": false
         }
@@ -218,24 +468,41 @@
         {
           "key": "available",
           "type": "boolean",
-          "label": { "en": "Forecast available", "fr": "Prévision disponible" }
+          "label": {
+            "en": "Forecast available",
+            "fr": "Prévision disponible",
+            "de": "Vorhersage verfügbar",
+            "es": "Pronóstico disponible"
+          }
         },
         {
           "key": "precipitation_expected",
           "type": "boolean",
-          "label": { "en": "Precipitation expected", "fr": "Précipitations attendues" }
+          "label": {
+            "en": "Precipitation expected",
+            "fr": "Précipitations attendues",
+            "de": "Niederschlag erwartet",
+            "es": "Precipitaciones previstas"
+          }
         },
         {
           "key": "minutes_until",
           "type": "number",
-          "label": { "en": "Minutes until it starts", "fr": "Minutes avant le début" }
+          "label": {
+            "en": "Minutes until it starts",
+            "fr": "Minutes avant le début",
+            "de": "Minuten bis zum Beginn",
+            "es": "Minutos hasta el inicio"
+          }
         },
         {
           "key": "precipitation_type",
           "type": "string",
           "label": {
             "en": "Precipitation (rain, snow, sleet, freezing_rain)",
-            "fr": "Précipitations (rain, snow, sleet, freezing_rain)"
+            "fr": "Précipitations (rain, snow, sleet, freezing_rain)",
+            "de": "Niederschlag (rain, snow, sleet, freezing_rain)",
+            "es": "Precipitaciones (rain, snow, sleet, freezing_rain)"
           }
         },
         {
@@ -243,18 +510,30 @@
           "type": "string",
           "label": {
             "en": "Intensity (light, moderate, heavy)",
-            "fr": "Intensité (light, moderate, heavy)"
+            "fr": "Intensité (light, moderate, heavy)",
+            "de": "Intensität (light, moderate, heavy)",
+            "es": "Intensidad (light, moderate, heavy)"
           }
         },
         {
           "key": "probability",
           "type": "number",
-          "label": { "en": "Probability (%)", "fr": "Probabilité (%)" }
+          "label": {
+            "en": "Probability (%)",
+            "fr": "Probabilité (%)",
+            "de": "Wahrscheinlichkeit (%)",
+            "es": "Probabilidad (%)"
+          }
         },
         {
           "key": "summary",
           "type": "string",
-          "label": { "en": "Summary", "fr": "Résumé" }
+          "label": {
+            "en": "Summary",
+            "fr": "Résumé",
+            "de": "Zusammenfassung",
+            "es": "Resumen"
+          }
         }
       ]
     }
@@ -262,20 +541,34 @@
   "widgets": [
     {
       "key": "precipitation_next_hour",
-      "label": { "en": "Precipitation, next hour", "fr": "Précipitations dans l'heure" },
+      "label": {
+        "en": "Precipitation, next hour",
+        "fr": "Précipitations dans l'heure",
+        "de": "Niederschlag, nächste Stunde",
+        "es": "Precipitaciones, próxima hora"
+      },
       "description": {
         "en": "Minute-by-minute rain and snow chart for the next 60 minutes.",
-        "fr": "Graphique minute par minute de la pluie et de la neige des 60 prochaines minutes."
+        "fr": "Graphique minute par minute de la pluie et de la neige des 60 prochaines minutes.",
+        "de": "Minutengenaues Regen- und Schneediagramm für die nächsten 60 Minuten.",
+        "es": "Gráfico minuto a minuto de lluvia y nieve de los próximos 60 minutos."
       },
       "icon": "cloud-rain",
       "settings": [
         {
           "key": "house",
           "type": "string",
-          "label": { "en": "House", "fr": "Maison" },
+          "label": {
+            "en": "House",
+            "fr": "Maison",
+            "de": "Zuhause",
+            "es": "Casa"
+          },
           "description": {
             "en": "Name of the house, exactly as shown in Gladys. Leave empty for your first house.",
-            "fr": "Nom de la maison, exactement comme dans Gladys. Laissez vide pour votre première maison."
+            "fr": "Nom de la maison, exactement comme dans Gladys. Laissez vide pour votre première maison.",
+            "de": "Name des Zuhauses, genau wie in Gladys angezeigt. Leer lassen für dein erstes Zuhause.",
+            "es": "Nombre de la casa, exactamente como aparece en Gladys. Déjelo vacío para su primera casa."
           },
           "required": false
         }

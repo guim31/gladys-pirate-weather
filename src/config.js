@@ -14,7 +14,7 @@ const REFRESH_INTERVAL_CHOICES = ['auto', '15', '30', '60', '120'];
 // Language of the texts the integration writes itself (scene variables, the
 // widget when the core sends no language). 'auto' follows the language of
 // the last weather request of the core.
-const LANGUAGE_CHOICES = ['auto', 'en', 'fr'];
+const LANGUAGE_CHOICES = ['auto', 'en', 'fr', 'de', 'es'];
 
 const DEFAULT_CONFIG = Object.freeze({
   api_key: '',
