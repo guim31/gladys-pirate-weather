@@ -24,6 +24,7 @@ async function start({
   houses = [HOUSES.okc],
   route = (url) => ({ body: fixtureForUrl(url), headers: quotaHeaders({ remaining: 9412 }) }),
   connect = true,
+  logger = silent,
 } = {}) {
   const clock = { now: OKC_NOW };
   const timers = [];
@@ -32,7 +33,7 @@ async function start({
   const app = createApp(gladys, {
     fetchImpl,
     now: () => clock.now,
-    logger: silent,
+    logger,
     setTimer: (fn, delay) => {
       const timer = { fn, delay, cleared: false };
       timers.push(timer);
@@ -268,4 +269,61 @@ test('a key changed while disconnected starts clean on reconnection', async () =
   await fake.connect();
   assert.equal(fetchImpl.calls.length, 2);
   assert.ok(fetchImpl.calls[1].includes('/another-key/'));
+});
+
+/**
+ * @returns {object} A logger recording its lines by level.
+ */
+function recordingLogger() {
+  const lines = { info: [], warn: [], debug: [], error: [] };
+  const logger = Object.fromEntries(
+    Object.keys(lines).map((level) => [level, (message) => lines[level].push(String(message))]),
+  );
+  return { logger, lines };
+}
+
+test('a normal cycle and the requests of Gladys write nothing in info', async () => {
+  const { logger, lines } = recordingLogger();
+  const { fake, timers } = await start({ logger });
+  await fake.weatherGet({ ...HOUSES.okc, language: 'en', units: 'metric' });
+  await fake.sceneAction('get_precipitation_next_hour', { house: '' });
+  await fake.widgetGet('precipitation_next_hour', { settings: {}, language: 'en' });
+  // The next cycle, from the timer.
+  await timers
+    .filter((timer) => !timer.cleared)
+    .at(-1)
+    .fn();
+  assert.deepEqual(lines.info, []);
+  assert.deepEqual(lines.warn, []);
+  assert.deepEqual(lines.error, []);
+  assert.ok(lines.debug.some((line) => line.startsWith('Refreshed 1 location(s)')));
+});
+
+test('an outage is logged once when it starts and once when it ends, never with the key', async () => {
+  const { logger, lines } = recordingLogger();
+  let down = false;
+  const { app, fake, clock } = await start({
+    config: { api_key: 'super-secret-key' },
+    logger,
+    route: (url) =>
+      down
+        ? { status: 503, body: 'down' }
+        : { body: fixtureForUrl(url), headers: quotaHeaders({ remaining: 9412 }) },
+  });
+  down = true;
+  for (let i = 0; i < 3; i += 1) {
+    clock.now += 10 * 60 * 1000;
+    await app.scheduler.requestCycle();
+    await fake.weatherGet({ ...HOUSES.okc, language: 'en', units: 'metric' }).catch(() => {});
+  }
+  assert.equal(lines.warn.length, 1);
+  assert.match(lines.warn[0], /Refresh failed for ".*": Pirate Weather answered HTTP 503/);
+  down = false;
+  clock.now += 10 * 60 * 1000;
+  await app.scheduler.requestCycle();
+  // (The fixture's alerts expired meanwhile: that line is legitimate.)
+  assert.equal(lines.info.filter((line) => /answers again/.test(line)).length, 1);
+  assert.ok(!lines.info.some((line) => /Refresh|Refreshed/.test(line)));
+  const all = Object.values(lines).flat().join('\n');
+  assert.ok(!all.includes('super-secret-key'));
 });

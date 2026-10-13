@@ -111,17 +111,28 @@ test('the validator catches what the core refuses', () => {
 test('a weather integration publishes no device, ever', async () => {
   assert.equal(manifest.type, 'weather');
   const gladys = createFakeGladys({ config: { api_key: 'key' }, houses: [HOUSES.okc] });
+  const timers = [];
   const app = createApp(gladys, {
     fetchImpl: fakeFetch((url) => ({ body: fixtureForUrl(url) })),
     now: () => OKC_NOW,
     logger: { info() {}, warn() {}, debug() {}, error() {} },
-    setTimer: () => ({}),
+    setTimer: (fn, delay) => {
+      timers.push(delay);
+      return {};
+    },
     clearTimer: () => {},
   });
   await gladys.fake.connect();
   await app.scheduler.settled();
+  assert.equal(timers.length, 1, 'the next refresh is on the internal timer');
+  assert.ok(timers[0] > 0);
   await gladys.fake.weatherGet({ ...HOUSES.okc, units: 'metric' });
   assert.equal(gladys.fake.handlers.scanRequest, null, 'no discovery handler');
+  // Gladys#3198: the core polls a device only with should_poll and a valid
+  // poll_frequency, never a device created without them. Nothing here relies
+  // on onPoll: no device, no poll handler, and the next refresh is armed by
+  // the integration's own timer (scheduler.js).
+  assert.equal(gladys.fake.handlers.poll, null, 'no onPoll handler');
   assert.deepEqual(gladys.fake.discoveredDevices, []);
   // Whatever would be published must pass the rules: none here.
   for (const device of gladys.fake.discoveredDevices) {

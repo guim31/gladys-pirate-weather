@@ -10,6 +10,12 @@ the notes of the version's GitHub Release.
 
 ## [Unreleased]
 
+### Changed
+
+- Quieter logs: no more line at every refresh. A Pirate Weather outage writes
+  one line when it starts and one when it ends, instead of one per attempt.
+- Gladys integration SDK 0.15.
+
 ## [1.1.0] - 2026-10-11
 
 ### Added

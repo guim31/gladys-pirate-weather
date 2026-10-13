@@ -212,7 +212,9 @@ function createForecastStore({
       return { ...(await refresh(latitude, longitude)), stale: false };
     } catch (err) {
       if (cached !== null && now() - cached.fetchedAt <= STALE_MAX_MS) {
-        logger.warn(`Serving a forecast cached ${ageMinutes(cached)} min ago: ${err.message}`);
+        // The scheduler already reported the failure: debug only, not one line
+        // per weather request of the core.
+        logger.debug(`Serving a forecast cached ${ageMinutes(cached)} min ago: ${err.message}`);
         return { ...cached, stale: true };
       }
       throw err;

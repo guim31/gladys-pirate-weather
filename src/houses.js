@@ -68,6 +68,8 @@ function houseMatches(house, wanted) {
 function createHouseRegistry({ fetchHouses, logger = console }) {
   // Located houses only: an unlocated house has no weather.
   let located = [];
+  // The read failed last time: the failure was already logged.
+  let failing = false;
 
   /**
    * @description Re-read the houses from Gladys. A failure keeps the previous
@@ -82,8 +84,17 @@ function createHouseRegistry({ fetchHouses, logger = console }) {
       located = (Array.isArray(houses) ? houses : []).filter(
         (house) => Number.isFinite(house?.latitude) && Number.isFinite(house?.longitude),
       );
+      if (failing) {
+        failing = false;
+        logger.info('The houses of Gladys can be read again');
+      }
     } catch (err) {
-      logger.warn(`Unable to read the houses of Gladys: ${err.message}`);
+      if (failing) {
+        logger.debug(`Houses of Gladys still unreadable: ${err.message}`);
+      } else {
+        failing = true;
+        logger.warn(`Unable to read the houses of Gladys: ${err.message}`);
+      }
     }
     return located;
   }

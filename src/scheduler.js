@@ -12,6 +12,10 @@
 // at the first error that would repeat for every house (invalid key, quota
 // spent); any other failure only skips its house. Cycles never overlap: a
 // cycle asked for while one runs is queued behind it.
+//
+// Logs: a failing location is reported once when it starts failing and once
+// when it recovers, not at every cycle (an outage of Pirate Weather would
+// otherwise write a line every 5 minutes per house).
 // -----------------------------------------------------------------------------
 
 import { planNextRefresh } from './budget.js';
@@ -59,6 +63,8 @@ function createScheduler({
   let started = false;
   let lastPlan = null;
   let lastCycleAt = null;
+  // Locations whose last refresh failed: the failure was already logged.
+  const failing = new Set();
 
   /**
    * @description Arm the next cycle.
@@ -107,6 +113,9 @@ function createScheduler({
         try {
           const entry = await store.refresh(group[0].latitude, group[0].longitude);
           refreshed += 1;
+          if (failing.delete(key)) {
+            logger.info(`Pirate Weather answers again for "${group[0].name}"`);
+          }
           for (const house of group) {
             try {
               await onRefreshed(house, entry);
@@ -117,7 +126,12 @@ function createScheduler({
         } catch (err) {
           failed += 1;
           error = err;
-          logger.warn(`Refresh failed for "${group[0].name}": ${err.message}`);
+          if (failing.has(key)) {
+            logger.debug(`Refresh still failing for "${group[0].name}": ${err.message}`);
+          } else {
+            failing.add(key);
+            logger.warn(`Refresh failed for "${group[0].name}": ${err.message}`);
+          }
           if (err.kind === ERROR_KINDS.AUTH || err.kind === ERROR_KINDS.QUOTA) {
             break;
           }
@@ -125,6 +139,11 @@ function createScheduler({
       }
     }
     store.prune(keys);
+    for (const key of failing) {
+      if (!keys.has(key)) {
+        failing.delete(key);
+      }
+    }
 
     let plan = planNextRefresh({
       locations: Math.max(1, keys.size || located.length),
