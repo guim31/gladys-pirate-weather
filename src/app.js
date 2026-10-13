@@ -171,7 +171,7 @@ function createApp(
       lastSummary = summary;
       watcher.forget(new Set(houses.list().map((house) => house.id)));
       const { plan } = summary;
-      logger.info(
+      logger.debug(
         `Refreshed ${summary.refreshed} location(s) of ${summary.houses} house(s); next refresh in ${Math.round(plan.delayMs / 60000)} min (${plan.reason})`,
       );
       if (alertsChanged) {
@@ -274,7 +274,9 @@ function createApp(
           now: now(),
         });
       } catch (err) {
-        logger.warn(`Widget content unavailable: ${err.message}`);
+        // The widget shows the reason itself: one line per dashboard view would
+        // only repeat it.
+        logger.debug(`Widget content unavailable: ${err.message}`);
         return buildUnavailableContent(t('widgetUnavailable', lang, { reason: err.message }));
       }
     },

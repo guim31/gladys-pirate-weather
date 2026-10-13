@@ -174,7 +174,7 @@ code de ce dépôt. Compléter ce fichier quand un nouveau piège est découvert
 - **Les clés de widgets, de déclencheurs et d'actions sont figées une fois publiées.**
 - `gladys_version` `>=5.1.0` dès qu'il y a widgets, déclencheurs ou actions de scène.
 
-**Type `weather` (contrat B.18, vérifié dans le code du cœur et le SDK 0.14)**
+**Type `weather` (contrat B.18, vérifié dans le code du cœur et le SDK 0.14/0.15)**
 
 - Le cœur tronque `alerts` à 10 **avant** de les valider (`normalizeWeather`) : trier soi-même
   par sévérité et plafonner, sinon une alerte tornade peut tomber derrière dix avis mineurs.
@@ -184,12 +184,31 @@ code de ce dépôt. Compléter ce fichier quand un nouveau piège est découvert
   `is_day`.
 - `requestWeatherRefresh()` et `requestWidgetRefresh()` sont **synchrones** (fire-and-forget),
   le second lève une exception sur une clé de widget mal formée.
-- Le SDK 0.14 publié n'a **pas** l'export `@gladysassistant/integration-sdk/testing`
+- Le SDK 0.15 a l'export `@gladysassistant/integration-sdk/testing` (`createFakeGladys`), mais
+  le faux client maison de `test/helpers/` est gardé : petit, il enregistre exactement ce que les
+  tests vérifient (y compris `onPoll`). Historique : le SDK 0.14 n'avait **pas** l'export
+  `@gladysassistant/integration-sdk/testing`
   (`createFakeGladys`) que décrit le README de `master` : faux client maison dans
   `test/helpers/`.
 - `source: "houses"` (sélecteur de maison) n'existe que sur `master` du cœur, dans **aucune**
   version publiée jusqu'à 5.1.4 : un manifeste qui l'emploie serait refusé. Désigner la maison
   par un champ `string` (son nom), comme Météo France.
+
+**Polling (issue GladysAssistant/Gladys#3198)**
+
+- Le cœur 5.2.0 ne sonde un appareil que si `should_poll: true` **et** `poll_frequency` valide, et
+  jamais un appareil déjà créé sans eux. Ce dépôt n'est **pas concerné** : intégration `weather`,
+  aucun appareil, aucun `onPoll` ; le rafraîchissement vient de son propre minuteur
+  (`src/scheduler.js`). `test/gladys-rules.test.js` le vérifie. Ne jamais faire dépendre une
+  cadence d'`onPoll`.
+
+**Logs**
+
+- Niveau info : cycle de vie seulement (démarrage, clé changée, panne de Pirate Weather au premier
+  échec puis au retour, alertes changées, déclencheur de scène). Chaque cycle, chaque requête
+  `onWeatherGet` ou de widget, chaque échec répété passent en debug (`LOG_LEVEL=debug`).
+  `test/app.test.js` vérifie qu'un cycle normal n'écrit rien en info et que la clé n'apparaît
+  jamais. La clé est dans le chemin de l'URL : ne jamais loguer l'URL.
 
 **Pirate Weather**
 

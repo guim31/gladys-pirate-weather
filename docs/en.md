@@ -185,8 +185,10 @@ on _Precipitation expected_ to decide what comes next. It costs no call.
   **Settings → Houses**.
 - **The dashboard still shows another provider** — open the settings of the
   weather widget and choose Pirate Weather.
-- **Logs**: the **Logs** tab of the integration shows each refresh and the
-  interval chosen ("next refresh in 15 min (auto)").
+- **Logs**: the **Logs** tab of the integration stays quiet while everything
+  works. It shows the start, one line when Pirate Weather stops answering and
+  one when it answers again. The interval chosen is given by **Test the API
+  key**.
 
 ## Privacy
 

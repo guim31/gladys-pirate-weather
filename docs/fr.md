@@ -194,8 +194,10 @@ Elle ne coûte aucun appel.
   votre maison dans **Paramètres → Maisons**.
 - **Le tableau de bord affiche toujours un autre fournisseur** — ouvrez les
   réglages du widget météo et choisissez Pirate Weather.
-- **Journaux** : l'onglet **Journaux** de l'intégration montre chaque mise à
-  jour et l'intervalle choisi (« next refresh in 15 min (auto) »).
+- **Journaux** : l'onglet **Journaux** de l'intégration reste calme tant que
+  tout va bien. Il montre le démarrage, une ligne quand Pirate Weather ne
+  répond plus et une quand il répond de nouveau. L'intervalle choisi est donné
+  par **Tester la clé d'API**.
 
 ## Confidentialité
 
